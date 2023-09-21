@@ -4,17 +4,21 @@
 
 import { useDraw } from '../hooks/useDraw'
 
+
+import ColorPicker from 'react-pick-color';  // pnpm install react-pick-color
+
 import React from 'react'
 
 export default function Draw() {
 
     const { canvasRef, onMouseDown, clear } = useDraw(drawLine)
+    const [color, setColor] = React.useState<string>('#000')
 
     console.log(clear)
 
     function drawLine({ prevPoint, currentPoint, ctx }: Draw0) {
         const { x: currX, y: currY } = currentPoint
-        const lineColor = '#000'
+        const lineColor = color
         const lineWidth = 5
 
         let startPoint = prevPoint ?? currentPoint
@@ -35,6 +39,7 @@ export default function Draw() {
 
     return (
         <div className=' w-screen h-screen bg-white flex justify-center items-center'>
+            <ColorPicker  color={color} onChange={(e) => setColor(e.hex)} />
             <button type='button' className='p-2 rounded-md border border-black' onClick={clear}>
                 Clear canvas
             </button>
