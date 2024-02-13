@@ -38,11 +38,9 @@ export default function useDrawLines3(
     const xStep = step + xMove
     const yStep = step + yMove
 
-    const toPoint = { x: fromPoint.x, y: fromPoint.y }    // Ne pas mettre toPoint = fromPoint car sinon pointe vers les même références et donc fromPoint se modifie à chaque fois que toPoint se modifie !!! (et inversement)
-  
+    const toPoint = { x: fromPoint.x, y: fromPoint.y }    // Ne pas mettre toPoint = fromPoint car sinon pointe vers les même références et donc fromPoint se modifie à chaque fois que toPoint se modifie !!! (et inversement)  
 
     const start = () => {
-
         if (!ctx) return
 
         setRunning(true)  
@@ -55,7 +53,6 @@ export default function useDrawLines3(
 
             // console.log("AVVVV-fromPoint", fromPoint)
             // console.log("AVVVV-toPoint", toPoint)
-
     
             // On calcule le point d'arrivée
             xIncrease ? toPoint.x += xStep : toPoint.x -= xStep
@@ -105,18 +102,15 @@ export default function useDrawLines3(
         //console.log("fromPoint", fromPoint)
         //console.log(intervalId)
         setIntervalId(id)           // ???? Je comprends pas comment le clearInterval peut connaitre l'id alors qu'on le met à jour après ??? (le LOG ci-dessus ne donne pas l'id à jour !!!)
-
     }
 
     const stop = () => {
         setRunning(false)
 
         //console.log("STOP !!!!!!!!!!")
-
         // console.log("intervalId", intervalId)
         // console.log("fromPoint", fromPoint)
         clearInterval(intervalId)
     }
-
     return { start, stop, running }
 }

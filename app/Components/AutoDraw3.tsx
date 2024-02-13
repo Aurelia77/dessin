@@ -5,11 +5,10 @@ import React from 'react'
 // Hooks perso
 import useDrawLines3 from '@/app/hooks3/useDrawLines3'
 
-
 import ColorPicker from 'react-pick-color';  // pnpm install react-pick-color
 
 export default function AutoDraw3() {
-    const canvasContainer = React.useRef<HTMLDivElement>(null) // On récupère la référence du canvas (en mettant la souris sur le HTML canvas on voit le type (pour TS)  )
+    const canvasContainer = React.useRef<HTMLDivElement>(null)
     const canvasRef = React.useRef<HTMLCanvasElement>(null) // On récupère la référence du canvas (en mettant la souris sur le HTML canvas on voit le type (pour TS)  )
     const [lineColor, setLineColor] = React.useState<string>('#000')
     const [circlesColor, setCirclesColor] = React.useState<string>('cyan')
@@ -24,33 +23,29 @@ export default function AutoDraw3() {
 
     // Une fois le canvas créé => On met à jour le point de départ => le centre du canvas 
     React.useEffect(() => {
-        //console.log(canvasContainer.current?.clientWidth)
         if (canvasRef.current !== null){ 
             if (canvasContainer.current?.clientWidth) canvasRef.current.width = canvasContainer.current?.clientWidth * 0.97
             if (canvasContainer.current?.clientHeight) canvasRef.current.height = canvasContainer.current?.clientHeight * 0.97
-        }        
-
+        }    
         setFromPoint({
             x: canvasRef.current?.width ? canvasRef.current?.width / 2 : 0,
             y: canvasRef.current?.height ? canvasRef.current?.height / 2 : 0
         })
-    }, [])  // A la fin du montage du composant
+    }, [])
 
 
     // Fonction qui dessine une ligne à partir d'un contexte (ici va être le canvas), d'un point de départ et d'un point d'arrivée
     function drawLine(
-        // 2 façons de passer les paramètres : si on vt utiliser le type Draw (et donc ça change quand on apelle la fonction!)=> utiliser la 1ère (destructuration)
+        // 2 façons de passer les paramètres : si on vt utiliser le type Draw (et donc ça change quand on apelle la fonction!) => utiliser la 1ère (destructuration)
         // **1** On utilise la destructuration pour récupérer les propriétés de l'objet Draw => les paramètres sont donc un seul => un objet avec 3 propriétés
         { ctx, fromPoint, toPoint }: Draw
-        // **2** OU :  on met les types un par un
+        // **2** OU : on met les types un par un
         // ctx: CanvasRenderingContext2D | null | undefined,
         // fromPoint: { x: number, y: number },    // Ou Point
         // toPoint: { x: number, y: number }
     ): void {      // Void car ne retourne rien
-
         if (ctx) {
             //console.log(fromPoint, toPoint)
-
             ctx.beginPath()                       // On commence un nouveau chemin
 
             ctx.lineWidth = lineWidth
@@ -60,7 +55,7 @@ export default function AutoDraw3() {
             ctx.lineTo(toPoint.x, toPoint.y)      // On trace une ligne jusqu'ici
             ctx.stroke()                          // On dessine la ligne
 
-             // On ajoute un rond pour ne pas faire d'espace si on dessine vite
+            // On ajoute un rond pour ne pas faire d'espace si on dessine vite + pour le design
             ctx.fillStyle = circlesColor
             ctx.beginPath()
             ctx.arc(fromPoint.x, fromPoint.y, circlesWidth/2, 0, Math.PI * 2)
@@ -73,6 +68,7 @@ export default function AutoDraw3() {
     const { start, stop, running } = useDrawLines3(canvasRef, fromPoint, setFromPoint, xMove, yMove, xIncrease, setXIncrease, yIncrease, setYIncrease, drawLine, 1)
     //console.log("***fromPoint", fromPoint)
 
+    // Pour dessiner des cercles => à ajouter plus tard
     // const { start: startCircle, stop: stopCircle, running: runningCircle } = useDrawLines3(canvasRef, fromPoint, setFromPoint, xMove, yMove, xIncrease, setXIncrease, yIncrease, setYIncrease, drawLine, 1, true, false)
 
     // const { start: start5Circle, stop: stop5Circle, running: running5Circle } = useDrawLines3(canvasRef, fromPoint, setFromPoint, xMove, yMove, xIncrease, setXIncrease, yIncrease, setYIncrease, drawLine, 1, true, true)
@@ -89,7 +85,7 @@ export default function AutoDraw3() {
     return (
         <div className=' w-full h-full bg-[#ccc] flex justify-around flex-wrap-reverse text-black'>
             <div ref={canvasContainer} className=' 
-                h-[60vh] sm:h-screen
+                h-[60vh] md:h-screen
                 flex-grow m-auto' 
             >
                 <canvas
@@ -115,10 +111,9 @@ export default function AutoDraw3() {
                 </div>
                 <div className=' m-2 sm:m-5 p-2 border border-[#4ce279] rounded-md '>
                     <div className=' flex justify-between mb-2'>
-                        {!running ?
-                            <button type='button' className='p-2 rounded-md border border-black bg-green-600 text-white font-bold w-full text-lg ' onClick={start} >LANCER !</button>
-                            :
-                            <button type='button' className='p-2 rounded-md border border-black bg-red-700 text-white font-bold w-full text-lg ' onClick={stop} >STOP !</button>
+                        {!running 
+                            ? <button type='button' className='p-2 rounded-md border border-black bg-green-600 text-white font-bold w-full text-lg ' onClick={start} >LANCER !</button>
+                            : <button type='button' className='p-2 rounded-md border border-black bg-red-700 text-white font-bold w-full text-lg ' onClick={stop} >STOP !</button>
                         }
                     </div>
                     <div className='my-2 flex items-center '>
