@@ -144,7 +144,7 @@ export default function AutoDraw3() {
                         </div>
                         <div className='my-2'>
                             <label className='mr-4 p-1 font-bold' htmlFor="xMove">
-                                Direction (abscisse X)
+                                Direction
                                 <input className='w-12 pl-1 mx-2 ' type="number" id="xMove" name="xMove" value={xMove} onChange={(e) => setXMove(parseInt(e.target.value))} />
                             </label>
                         </div>
